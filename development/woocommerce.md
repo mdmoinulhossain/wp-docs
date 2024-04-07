@@ -17,4 +17,5 @@ add_filter( 'woocommerce_enable_order_notes_field', '__return_false', 9999 );
 
 
 <!-- Details in -->
+https://developer.woo.com/docs/customizing-checkout-fields-using-actions-and-filters/
 https://www.businessbloomer.com/woocommerce-checkout-quote-system/

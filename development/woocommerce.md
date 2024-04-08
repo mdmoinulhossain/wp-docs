@@ -1,4 +1,5 @@
-//Remove Checkout Fileds
+### Remove Checkout Fileds
+```
 function quadlayers_remove_checkout_fields( $fields ) {
 
  unset($fields['billing']['billing_company']);
@@ -14,8 +15,8 @@ function quadlayers_remove_checkout_fields( $fields ) {
 add_filter( 'woocommerce_checkout_fields' , 'quadlayers_remove_checkout_fields' );
 
 add_filter( 'woocommerce_enable_order_notes_field', '__return_false', 9999 );
+```
 
-
-<!-- Details in -->
-https://developer.woo.com/docs/customizing-checkout-fields-using-actions-and-filters/
-https://www.businessbloomer.com/woocommerce-checkout-quote-system/
+### Details in 
+* https://developer.woo.com/docs/customizing-checkout-fields-using-actions-and-filters/
+* https://www.businessbloomer.com/woocommerce-checkout-quote-system/

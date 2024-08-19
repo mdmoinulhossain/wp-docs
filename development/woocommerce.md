@@ -38,3 +38,23 @@ function customize_checkout_button_text() {return __( 'Confirm Order', 'woocomme
 add_filter( 'woocommerce_order_button_text', 'customize_checkout_button_text' );
 
 ```
+
+### add extra button in woocemmerce product card
+```
+add_action('woocommerce_after_shop_loop_item', 'add_custom_button_after_stock', 15);
+
+function add_custom_button_after_stock() {
+    // Get the global product object
+    global $product;
+
+    // Check if the product is in stock
+    if ($product->is_in_stock()) {
+        // Get the product's single page URL
+        $product_url = get_permalink($product->get_id());
+
+        echo '<div class="custom-button-container">';
+        echo '<a href="' . esc_url($product_url) . '" class="button custom-button">অর্ডার করুন</a>';
+        echo '</div>';
+    }
+}
+```

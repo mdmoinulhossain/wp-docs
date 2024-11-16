@@ -4,7 +4,7 @@
 
 ```
 Key Points to Check:
-1. Template: Make sure that the Template line matches the directory name of the parent theme. The correct template name for the "Hello Elementor" theme is typically hello-elementor (all lowercase without spaces).
+1. Template(Parent theme Text Domain): Make sure that the Template line matches the directory name of the parent theme. The correct template name for the "Hello Elementor" theme is typically hello-elementor (all lowercase without spaces).
 
-2. Text Domain: Ensure that your text domain matches the convention hello-elementor-child (all lowercase and typically separated by hyphens).
+2. Text Domain(your child theme folder name): Ensure that your text domain matches the convention hello-elementor-child (all lowercase and typically separated by hyphens).
 ```

@@ -132,3 +132,72 @@ add_action('template_redirect', 'add_product_to_cart_on_checkout');
 
 
 ```
+### Redirect "Add to Cart" to the Checkout Page
+```
+add_filter('woocommerce_add_to_cart_redirect', 'custom_redirect_to_checkout');
+function custom_redirect_to_checkout($url) {
+    // Set the URL to the checkout page
+    return wc_get_checkout_url();
+}
+```
+
+### Redirection from Cart to Checkout
+```
+add_action('template_redirect', 'redirect_cart_to_checkout');
+function redirect_cart_to_checkout() {
+    // Check if the current page is the cart page
+    if (is_cart()) {
+        // Prevent redirect loop by ensuring we are not already on the checkout page
+        if (!is_checkout()) {
+            wp_safe_redirect(wc_get_checkout_url());
+            exit;
+        }
+    }
+}
+```
+### Display a custom message on the checkout page if the cart is empty
+```
+add_action('template_redirect', 'redirect_empty_cart_from_checkout');
+function redirect_empty_cart_from_checkout() {
+    // Ensure WooCommerce cart is initialized properly
+    if (function_exists('WC') && is_checkout() && WC()->cart->is_empty()) {
+        // Redirect to the shop page with a message
+        wc_add_notice(__('Your cart is currently empty. Please add items to proceed to checkout.', 'martfury'), 'notice');
+        wp_safe_redirect(wc_get_page_permalink('shop')); // Redirect to the shop page instead of the cart
+        exit;
+    }
+}
+```
+
+### change text on website
+
+```
+function change_button_text() {
+    ?>
+    <script>
+    jQuery(document).ready(function($) {
+        function updateButtonText() {
+            $('.single_add_to_cart_button').text('অর্ডার করতে চাই');
+			$('.woocommerce-billing-fields h3').text('নিচের ফর্মটি পূরণ করুন');
+			$('#order_review_heading').text('অর্ডারের বিস্তারিত');
+            $('#place_order2').text('অর্ডার কনফার্ম করুন');
+			$('.elementor-button--checkout').text('অর্ডার করুন');
+			$('label[for="billing_first_name"]').text('নাম*');
+                $('label[for="billing_address_1"]').text('ঠিকানা*');
+                $('label[for="billing_state"]').text('জেলা*');
+                $('label[for="billing_phone"]').text('ফোন*');
+        }
+
+        // Call it on initial load
+        updateButtonText();
+
+        // Also call it after WooCommerce AJAX events
+        $(document.body).on('updated_cart_totals updated_checkout', function() {
+            updateButtonText();
+        });
+    });
+    </script>
+    <?php
+}
+add_action('wp_footer', 'change_button_text');
+```

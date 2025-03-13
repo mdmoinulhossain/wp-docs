@@ -201,3 +201,9 @@ function change_button_text() {
 }
 add_action('wp_footer', 'change_button_text');
 ```
+
+### Remove checkout field data in browser cache after order
+
+```
+add_filter('woocommerce_checkout_get_value','__return_empty_string',10);
+```

@@ -207,3 +207,59 @@ add_action('wp_footer', 'change_button_text');
 ```
 add_filter('woocommerce_checkout_get_value','__return_empty_string',10);
 ```
+
+
+### To carry the order data through to your custom “Thank You” page
+# Redirect, passing order ID & key
+```
+add_action( 'template_redirect', 'custom_redirect_after_checkout' );
+function custom_redirect_after_checkout() {
+    // Are we on the built-in order-received endpoint?
+    if ( is_wc_endpoint_url( 'order-received' ) ) {
+
+        // 1) Get the order ID from the endpoint:
+        $order_id  = absint( get_query_var( 'order-received' ) );
+        // 2) Get the order key from the URL (?key=…)
+        $order_key = isset( $_GET['key'] ) ? sanitize_text_field( wp_unslash( $_GET['key'] ) ) : '';
+
+        // 3) Build your Thank You URL with those as query args
+        $thank_you_url = add_query_arg( [
+            'order_id'  => $order_id,
+            'order_key' => $order_key,
+        ], home_url( '/thank-you/' ) );
+
+        wp_safe_redirect( $thank_you_url );
+        exit;
+    }
+}
+
+```
+# On your Thank You page template or shortcode
+
+```
+add_shortcode( 'show_order_details', function() {
+    $order_id  = isset( $_GET['order_id'] )  ? absint( $_GET['order_id'] ) : 0;
+    $order_key = isset( $_GET['order_key'] ) ? sanitize_text_field( wp_unslash( $_GET['order_key'] ) ) : '';
+    $home_url = home_url();
+
+    // If missing or invalid
+    if ( ! $order_id || ! $order_key ) {
+        return '<h1>Order not found.</h1><a href="' . esc_url( $home_url ) . '">Back To Home</a>';
+    }
+
+    $order = wc_get_order( $order_id );
+    if ( ! $order || $order->get_order_key() !== $order_key ) {
+        return '<h1>Invalid order.</h1><a href="' . esc_url( $home_url ) . '">Back To Home</a>';
+    }
+
+    // Valid order: render content
+    ob_start();
+    echo '<h1>Thank you for your order</h1>';
+    wc_get_template( 'checkout/thankyou.php', [ 'order' => $order ] );
+    echo '<p><a href="' . esc_url( $home_url ) . '">Back To Home</a></p>';
+    return ob_get_clean();
+});
+
+------- Short code -------
+[show_order_details]
+```

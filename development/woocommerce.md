@@ -37,6 +37,13 @@ function custom_button_proceed_to_checkout() {
 function customize_checkout_button_text() {return __( 'Confirm Order', 'woocommerce' );}
 add_filter( 'woocommerce_order_button_text', 'customize_checkout_button_text' );
 
+or
+
+add_filter( 'woocommerce_order_button_text', 'custom_woocommerce_order_button_text' );
+function custom_woocommerce_order_button_text() {
+    return 'Complete Purchase'; // Change this to your desired text
+}
+
 ```
 
 ### add extra button in woocemmerce product card
